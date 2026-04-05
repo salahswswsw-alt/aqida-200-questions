@@ -39,35 +39,35 @@ const QuestionDetail = () => {
     .slice(0, 2);
 
   return (
-    <div className="detail-container" style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem 1rem' }}>
+    <div className="detail-container">
       <button onClick={() => navigate('/questions')} className="back-btn" style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '1.1rem', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem' }}>
         <ArrowRight size={20} />
         العودة لجميع الأسئلة
       </button>
 
-      <div className="detail-card" style={{ padding: '3rem', borderRadius: 'var(--radius-xl)' }}>
+      <div className="detail-card">
         <div className="detail-header" style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
           <div className="question-badge">{question.id}</div>
           <span className="question-category">{question.category}</span>
         </div>
         
-        <h1 className="detail-title" style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '2rem', lineHeight: 1.4 }}>{question.question}</h1>
+        <h1 className="detail-title" style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '2rem', lineHeight: 1.4, color: 'var(--color-white)' }}>{question.question}</h1>
         
-        <div className="detail-answer" style={{ fontSize: '1.2rem', lineHeight: 1.8 }}>
+        <div className="detail-answer">
           <p>{question.answer}</p>
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '3rem', borderTop: '1px solid var(--color-border)', paddingTop: '2rem' }}>
+      <div className="nav-buttons">
         {hasPrev ? (
-          <button onClick={handlePrev} className="btn btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <button onClick={handlePrev} className="btn btn-outline">
             <ArrowRight size={20} />
             السؤال السابق
           </button>
         ) : <div />}
         
         {hasNext ? (
-          <button onClick={handleNext} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <button onClick={handleNext} className="btn btn-primary">
             السؤال التالي
             <ArrowLeft size={20} />
           </button>

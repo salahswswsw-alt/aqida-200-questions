@@ -23,9 +23,9 @@ const Questions = () => {
         جميع <span className="highlight">الأسئلة</span>
       </h1>
       
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '3rem', flexWrap: 'wrap' }}>
-        <div style={{ flex: '1', minWidth: '300px', position: 'relative' }}>
-          <div style={{ position: 'absolute', right: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-bg-dark)' }}>
+      <div className="controls-container">
+        <div className="search-wrapper">
+          <div style={{ position: 'absolute', right: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-bg-dark)', zIndex: 1 }}>
             <Search size={20} />
           </div>
           <input
@@ -33,20 +33,12 @@ const Questions = () => {
             placeholder="ابحث في الأسئلة أو الإجابات..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '1rem 3rem 1rem 1rem',
-              borderRadius: 'var(--radius-full)',
-              border: '1px solid var(--color-border)',
-              fontSize: '1rem',
-              fontFamily: 'inherit',
-              background: 'var(--color-white)',
-              color: 'var(--color-bg-dark)'
-            }}
+            className="form-input"
+            style={{ paddingRight: '3.5rem' }}
           />
         </div>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'var(--color-card-bg)', padding: '0.5rem 1.5rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--color-border)' }}>
+        <div className="filter-wrapper">
           <Filter size={20} color="var(--color-gold)" />
           <select
             value={selectedCategory}
@@ -58,7 +50,8 @@ const Questions = () => {
               fontFamily: 'inherit',
               cursor: 'pointer',
               outline: 'none',
-              color: 'var(--color-white)'
+              color: 'var(--color-white)',
+              padding: '0.25rem'
             }}
           >
             {categories.map(cat => (
