@@ -16,7 +16,7 @@ const Home = () => {
           منهج أهل السنة والجماعة
         </div>
         <h1 className="hero-title">
-          تعلّم <span className="text-gold">العقيدة</span><br />
+          تعلّم <span className="text-sky">العقيدة</span><br />
           بأسلوب مبتكر
         </h1>
         <p className="hero-subtitle">
@@ -107,12 +107,12 @@ const Home = () => {
           استكشف <span className="highlight">الأسئلة</span>
         </h2>
         
-        {/* categories mockup */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
-          <span style={{ background: 'var(--color-gold)', color: 'var(--color-bg-dark)', padding: '0.5rem 1rem', borderRadius: '20px', fontWeight: 'bold' }}>الكل</span>
-          <span style={{ background: 'rgba(255,255,255,0.05)', padding: '0.5rem 1rem', borderRadius: '20px', cursor: 'pointer' }}>المقدمات</span>
-          <span style={{ background: 'rgba(255,255,255,0.05)', padding: '0.5rem 1rem', borderRadius: '20px', cursor: 'pointer' }}>التوحيد</span>
-          <span style={{ background: 'rgba(255,255,255,0.05)', padding: '0.5rem 1rem', borderRadius: '20px', cursor: 'pointer' }}>العبادة</span>
+        {/* categories stickers */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', marginBottom: '2.5rem', flexWrap: 'wrap' }}>
+          <span style={{ background: 'var(--color-sky)', color: '#fff', padding: '0.6rem 1.25rem', borderRadius: 'var(--radius-full)', fontWeight: 'bold', boxShadow: 'var(--shadow-glow)' }}>الكل</span>
+          <span style={{ background: 'rgba(255,255,255,0.05)', padding: '0.6rem 1.25rem', borderRadius: 'var(--radius-full)', cursor: 'pointer', border: '1px solid var(--color-border)' }}>المقدمات</span>
+          <span style={{ background: 'rgba(255,255,255,0.05)', padding: '0.6rem 1.25rem', borderRadius: 'var(--radius-full)', cursor: 'pointer', border: '1px solid var(--color-border)' }}>التوحيد</span>
+          <span style={{ background: 'rgba(255,255,255,0.05)', padding: '0.6rem 1.25rem', borderRadius: 'var(--radius-full)', cursor: 'pointer', border: '1px solid var(--color-border)' }}>العبادة</span>
         </div>
 
         <div className="questions-grid">
@@ -138,13 +138,13 @@ const Home = () => {
       {/* Book Info Section */}
       <section className="book-section" id="book">
         <div className="book-image">
-          <div className="book-mockup">
+          <div className="book-mockup" style={{ background: 'linear-gradient(135deg, var(--color-sky) 0%, #0369a1 100%)' }}>
             <div className="book-number">٢٠٠</div>
             <div className="book-text">سؤال وجواب<br/>في العقيدة</div>
           </div>
         </div>
         <div className="book-content">
-          <h2>عن كتاب <span className="text-gold">200 سؤال وجواب</span></h2>
+          <h2>عن كتاب <span className="text-sky">200 سؤال وجواب</span></h2>
           <p>
             تأليف العلامة حافظ بن أحمد الحكمي، وهو من أعظم المختصرات التي جمعت أصول الدين 
             بأسلوب السؤال والجواب، مما يسهل على طالب العلم والمسلم العامي استيعابها وفهمها.
@@ -174,7 +174,7 @@ const Home = () => {
           </div>
           <input type="text" className="form-input" placeholder="الموضوع" />
           <textarea className="form-input" rows={5} placeholder="الرسالة..."></textarea>
-          <button type="submit" className="btn btn-blue" style={{ width: '100%', padding: '1rem', marginTop: '0.5rem', borderRadius: 'var(--radius-md)' }}>
+          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1.1rem', marginTop: '1rem' }}>
             إرسال الرسالة
           </button>
         </form>
