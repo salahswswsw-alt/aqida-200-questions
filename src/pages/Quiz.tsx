@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Brain, CheckCircle, XCircle, RotateCcw, Trophy, ChevronLeft, ChevronRight, Home, ShieldCheck } from 'lucide-react';
+import { CheckCircle, XCircle, RotateCcw, Trophy, ChevronLeft, ChevronRight, Home, ShieldCheck } from 'lucide-react';
 import { quizQuestions } from '../data/quizQuestions';
 import { useNotification } from '../contexts/NotificationContext';
 
@@ -125,10 +125,10 @@ const Quiz = () => {
 
         <div className="quiz-result-stats" style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '3rem' }}>
           <div style={{ color: 'var(--color-success)', fontWeight: 700 }}>
-             {score} صحيحة
+            {score} صحيحة
           </div>
           <div style={{ color: 'var(--color-error)', fontWeight: 700 }}>
-             {TOTAL - score} خاطئة
+            {TOTAL - score} خاطئة
           </div>
         </div>
 
