@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle, XCircle, RotateCcw, Trophy, ChevronLeft, ChevronRight, Home, ShieldCheck } from 'lucide-react';
 import { quizQuestions } from '../data/quizQuestions';
