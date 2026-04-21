@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, LogIn, LayoutDashboard, ShieldCheck, LogOut, User } from 'lucide-react';
+import { Menu, X, LogIn, LayoutDashboard, ShieldCheck, LogOut, User, ClipboardList } from 'lucide-react';
 import Logo from './Logo';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -39,6 +39,10 @@ const Navbar = () => {
         <div className="nav-links desktop-only">
           <Link to="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}>الرئيسية</Link>
           <Link to="/questions" className={`nav-link ${isActive('/question') ? 'active' : ''}`}>جميع الأسئلة</Link>
+          <Link to="/exam" className={`nav-link ${isActive('/exam') ? 'active' : ''}`}>
+            <ClipboardList size={16} style={{ display: 'inline', marginLeft: '4px', verticalAlign: 'middle' }} />
+            اختبار
+          </Link>
           <a href="#about" className="nav-link">عن المنصة</a>
           <a href="#book" className="nav-link">الكتاب</a>
           {user && (
@@ -91,6 +95,10 @@ const Navbar = () => {
       <div className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
         <Link to="/" className={`nav-link ${isActive('/') ? 'active' : ''}`} onClick={closeMenu}>الرئيسية</Link>
         <Link to="/questions" className={`nav-link ${isActive('/question') ? 'active' : ''}`} onClick={closeMenu}>جميع الأسئلة</Link>
+        <Link to="/exam" className={`nav-link ${isActive('/exam') ? 'active' : ''}`} onClick={closeMenu}>
+          <ClipboardList size={15} style={{ display: 'inline', marginLeft: '4px', verticalAlign: 'middle' }} />
+          اختبار
+        </Link>
         <a href="#about" className="nav-link" onClick={closeMenu}>عن المنصة</a>
         <a href="#book" className="nav-link" onClick={closeMenu}>الكتاب</a>
         {user && (

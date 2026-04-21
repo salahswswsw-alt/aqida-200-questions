@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Target, Layers, Layout, Compass, Users, CheckCircle, Video, Book } from 'lucide-react';
+import { Target, Layers, Layout, Compass, Users, CheckCircle, Video, Book, ClipboardList } from 'lucide-react';
 import questions from '../data/questions.json';
 
 const Home = () => {
@@ -27,10 +27,18 @@ const Home = () => {
           <Link to="/questions" className="btn btn-primary">
             ابدأ التعلّم الآن
           </Link>
-          <a 
-            href="https://drive.google.com/file/d/1EAf3Al8XSZjza1KNJ04-cFgnPtAdYd0F/view?usp=sharing" 
-            target="_blank" 
-            rel="noopener noreferrer" 
+          <Link
+            to="/exam"
+            className="btn btn-outline"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+          >
+            <ClipboardList size={20} />
+            اختبار
+          </Link>
+          <a
+            href="https://drive.google.com/file/d/1EAf3Al8XSZjza1KNJ04-cFgnPtAdYd0F/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
             className="btn btn-outline"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
           >

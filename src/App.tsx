@@ -11,6 +11,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Quiz from './pages/Quiz';
+import Exam from './pages/Exam';
 import './index.css';
 import type { ReactNode } from 'react';
 
@@ -40,6 +41,7 @@ const AppContent = () => (
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/quiz" element={<PrivateRoute><Quiz /></PrivateRoute>} />
+        <Route path="/exam" element={<Exam />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </main>
