@@ -12,7 +12,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Quiz from './pages/Quiz';
 import Exam from './pages/Exam';
-import { LanguageProvider } from './contexts/LanguageContext';
+import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import './index.css';
 import type { ReactNode } from 'react';
 

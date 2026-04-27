@@ -164,7 +164,6 @@ export const translations: Record<Language, Record<string, string>> = {
     'nav.register': 'Register',
     'nav.logout': 'Logout',
     'home.hero.title': '200 Questions & Answers in Creed',
-    'home.hero.subtitle': 'An educational platform aimed at simplifying the study of Islamic Creed through a Q&A methodology derived from the book "200 Questions and Answers in Creed" by Sheikh Hafiz bin Ahmed al-Hakami.',
     'home.hero.badge': 'Methodology of Ahlus-Sunnah wal-Jama\'ah',
     'home.hero.title_part1': 'Learn ',
     'home.hero.title_part2': 'Creed',
