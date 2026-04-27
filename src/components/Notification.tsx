@@ -1,5 +1,6 @@
 import { CheckCircle, AlertCircle, AlertTriangle, Info, X } from 'lucide-react';
 import { useNotification, type Notification, type NotificationType } from '../contexts/NotificationContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const icons: Record<NotificationType, typeof CheckCircle> = {
   success: CheckCircle,
@@ -10,6 +11,7 @@ const icons: Record<NotificationType, typeof CheckCircle> = {
 
 const NotificationItem = ({ n, onRemove }: { n: Notification; onRemove: (id: string) => void }) => {
   const Icon = icons[n.type];
+  const { language } = useLanguage();
 
   const handleRemove = () => {
     onRemove(n.id);
@@ -24,7 +26,7 @@ const NotificationItem = ({ n, onRemove }: { n: Notification; onRemove: (id: str
         {n.title && <p className="notification-title">{n.title}</p>}
         <p className="notification-message">{n.message}</p>
       </div>
-      <button className="notification-close" onClick={handleRemove} aria-label="إغلاق">
+      <button className="notification-close" onClick={handleRemove} aria-label={language === 'ar' ? "إغلاق" : "Close"}>
         <X size={16} />
       </button>
     </div>

@@ -12,16 +12,18 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Quiz from './pages/Quiz';
 import Exam from './pages/Exam';
+import { LanguageProvider } from './contexts/LanguageContext';
 import './index.css';
 import type { ReactNode } from 'react';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
   const { user, loading } = useAuth();
+  const { language } = useLanguage();
   if (loading) {
     return (
       <div className="loading-screen">
         <div className="loading-spinner" />
-        <p>جارٍ التحميل...</p>
+        <p>{language === 'ar' ? 'جارٍ التحميل...' : 'Loading...'}</p>
       </div>
     );
   }
@@ -52,11 +54,13 @@ const AppContent = () => (
 function App() {
   return (
     <Router>
-      <NotificationProvider>
-        <AuthProvider>
-          <AppContent />
-        </AuthProvider>
-      </NotificationProvider>
+      <LanguageProvider>
+        <NotificationProvider>
+          <AuthProvider>
+            <AppContent />
+          </AuthProvider>
+        </NotificationProvider>
+      </LanguageProvider>
     </Router>
   );
 }

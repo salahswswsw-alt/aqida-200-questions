@@ -2384,3 +2384,93 @@ a {
   .exam-result-actions { flex-direction: column; }
   .exam-result-actions .btn { width: 100%; justify-content: center; }
 }
+/* ─── Language Switcher ─── */
+.nav-lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-sky-light);
+  border: 1px solid var(--color-sky-border);
+  color: var(--color-sky);
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-main);
+}
+
+.nav-lang-btn:hover {
+  background: rgba(14, 165, 233, 0.18);
+  transform: translateY(-1px);
+}
+
+.nav-lang-btn span {
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+/* ─── LTR Support Overrides ─── */
+[dir="ltr"] body {
+  text-align: left;
+}
+
+[dir="ltr"] .navbar-container {
+  flex-direction: row;
+}
+
+[dir="ltr"] .nav-avatar {
+  margin-right: 0.5rem;
+  margin-left: 0;
+}
+
+[dir="ltr"] .nav-user-btn {
+  flex-direction: row;
+}
+
+[dir="ltr"] .hero-buttons,
+[dir="ltr"] .stats-container,
+[dir="ltr"] .nav-links,
+[dir="ltr"] .nav-actions {
+  flex-direction: row;
+}
+
+[dir="ltr"] .feature-card,
+[dir="ltr"] .question-card {
+  text-align: left;
+  align-items: flex-start;
+}
+
+[dir="ltr"] .book-section {
+  flex-direction: row;
+}
+
+[dir="ltr"] .book-mockup {
+  border-radius: 24px 8px 8px 24px;
+  box-shadow: 15px 15px 35px rgba(0, 0, 0, 0.4), var(--shadow-glow);
+}
+
+[dir="ltr"] .book-mockup::before {
+  left: auto;
+  right: 12px;
+}
+
+[dir="ltr"] .footer-content {
+  text-align: left;
+}
+
+[dir="ltr"] .footer-link:hover {
+  transform: translateX(4px);
+}
+
+/* Mobile Toggle Adjustment */
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 991px) {
+  .mobile-only {
+    display: flex;
+  }
+}

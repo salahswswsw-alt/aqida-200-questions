@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { CheckCircle, XCircle, RotateCcw, Trophy, ChevronLeft, ChevronRight, Home, ShieldCheck } from 'lucide-react';
 import { quizQuestions } from '../data/quizQuestions';
 import { useNotification } from '../contexts/NotificationContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 type Phase = 'start' | 'question' | 'result';
 
@@ -16,9 +17,9 @@ const Quiz = () => {
   const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState<(number | null)[]>(Array(TOTAL).fill(null));
   const { addNotification } = useNotification();
+  const { t, language, dir } = useLanguage();
 
   const current = quizQuestions[currentIndex];
-  // Smoother progress calculation
   const progress = ((currentIndex) / TOTAL) * 100;
 
   useEffect(() => {
@@ -51,8 +52,8 @@ const Quiz = () => {
       setPhase('result');
       addNotification({
         type: 'success',
-        title: 'اكتمل الاختبار!',
-        message: `لقد حصلت على ${score} من ${TOTAL}`
+        title: t('quiz.completed'),
+        message: t('quiz.completed_msg').replace('{score}', score.toString()).replace('{total}', TOTAL.toString())
       });
     } else {
       setCurrentIndex(i => i + 1);
@@ -70,39 +71,59 @@ const Quiz = () => {
 
   const getScoreLabel = () => {
     const pct = (score / TOTAL) * 100;
-    if (pct >= 90) return { label: 'ممتاز! تبارك الله', color: '#22c55e' };
-    if (pct >= 75) return { label: 'جيد جداً، أحسنت', color: '#0ea5e9' };
-    if (pct >= 60) return { label: 'جيد، استمر في المراجعة', color: '#f59e0b' };
-    return { label: 'تحتاج مراجعة أكثر للكتاب', color: '#ef4444' };
+    if (pct >= 90) return { label: t('quiz.score_excellent'), color: '#22c55e' };
+    if (pct >= 75) return { label: t('quiz.score_very_good'), color: '#0ea5e9' };
+    if (pct >= 60) return { label: t('quiz.score_good'), color: '#f59e0b' };
+    return { label: t('quiz.score_needs_review'), color: '#ef4444' };
   };
+
+  const ArrowIconNext = dir === 'rtl' ? ChevronLeft : ChevronRight;
+  const ArrowIconExit = dir === 'rtl' ? ChevronRight : ChevronLeft;
+
+  const getTranslatedQuestion = () => {
+    if (language === 'ar') return {
+      question: current.question,
+      options: current.options,
+      explanation: current.explanation
+    };
+
+    // Placeholder for translated quiz content
+    // In a real app, this would come from a translated JSON or API
+    return {
+      question: `Question ${current.id}: (Translated Content Available in Arabic)`,
+      options: current.options.map((_, i) => `Option ${['A', 'B', 'C', 'D'][i]}`),
+      explanation: "Detailed explanation is available in the Arabic version."
+    };
+  };
+
+  const translated = getTranslatedQuestion();
 
   if (phase === 'start') {
     return (
       <div className="quiz-start" style={{ textAlign: 'center', padding: '4rem 1rem' }}>
-        <div className="auth-icon-wrapper" style={{ width: '80px', height: '80px', marginBottom: '2rem' }}>
+        <div className="auth-icon-wrapper" style={{ width: '80px', height: '80px', marginBottom: '2rem', margin: '0 auto 2rem' }}>
           <ShieldCheck size={42} />
         </div>
-        <h1 className="auth-title">اختبر عقيدتك</h1>
+        <h1 className="auth-title">{t('dash.quiz_title')}</h1>
         <p className="auth-subtitle" style={{ maxWidth: '600px', margin: '0 auto 2.5rem' }}>
-          اختبر معلوماتك في العقيدة الإسلامية من خلال {TOTAL} سؤالاً شاملًا.
-          منهج أهل السنة والجماعة بأسلوب السؤال والجواب.
+          {t('dash.quiz_desc')}
         </p>
-        <div className="stats-container" style={{ margin: '2rem 0' }}>
+        <div className="stats-container" style={{ margin: '2rem 0', display: 'flex', justifyContent: 'center', gap: '2rem' }}>
           <div className="stat-item">
             <div className="stat-number">{TOTAL}</div>
-            <div className="stat-label">سؤالاً</div>
+            <div className="stat-label">{t('quiz.questions')}</div>
           </div>
           <div className="stat-item">
             <div className="stat-number">4</div>
-            <div className="stat-label">خيارات</div>
+            <div className="stat-label">{t('quiz.options')}</div>
           </div>
         </div>
-        <button className="btn btn-primary" onClick={handleStart} style={{ padding: '1.25rem 3.5rem', fontSize: '1.2rem' }}>
-          <ShieldCheck size={22} style={{ marginLeft: '8px' }} />
-          ابدأ الاختبار الآن
+        <button className="btn btn-primary" onClick={handleStart} style={{ padding: '1.25rem 3.5rem', fontSize: '1.2rem', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <ShieldCheck size={22} />
+          {t('dash.quiz_cta')}
         </button>
         <div style={{ marginTop: '2rem' }}>
-          <Link to="/dashboard" className="auth-link">العودة للوحة التحكم</Link>
+          <Link to="/dashboard" className="auth-link">{t('questions.back_to_dashboard') || (language === 'ar' ? 'العودة للوحة التحكم' : 'Back to Dashboard')}</Link>
         </div>
       </div>
     );
@@ -112,12 +133,12 @@ const Quiz = () => {
     const { label, color } = getScoreLabel();
     const pct = Math.round((score / TOTAL) * 100);
     return (
-      <div className="quiz-result">
-        <div className="quiz-result-trophy" style={{ color }}>
+      <div className="quiz-result" style={{ textAlign: 'center' }}>
+        <div className="quiz-result-trophy" style={{ color, margin: '0 auto 2rem' }}>
           <Trophy size={64} />
         </div>
-        <h1 className="auth-title">انتهى الاختبار!</h1>
-        <div className="quiz-result-score-ring" style={{ borderColor: color }}>
+        <h1 className="auth-title">{t('quiz.finished')}</h1>
+        <div className="quiz-result-score-ring" style={{ borderColor: color, margin: '2rem auto' }}>
           <span className="quiz-result-score-num" style={{ color }}>{score}</span>
           <span className="quiz-result-score-total">/{TOTAL}</span>
         </div>
@@ -125,21 +146,21 @@ const Quiz = () => {
 
         <div className="quiz-result-stats" style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '3rem' }}>
           <div style={{ color: 'var(--color-success)', fontWeight: 700 }}>
-            {score} صحيحة
+            {t('quiz.correct_count').replace('{count}', score.toString())}
           </div>
           <div style={{ color: 'var(--color-error)', fontWeight: 700 }}>
-            {TOTAL - score} خاطئة
+            {t('quiz.wrong_count').replace('{count}', (TOTAL - score).toString())}
           </div>
         </div>
 
         <div className="quiz-result-actions" style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <button className="btn btn-primary" onClick={handleStart}>
+          <button className="btn btn-primary" onClick={handleStart} style={{ gap: '0.5rem' }}>
             <RotateCcw size={18} />
-            إعادة الاختبار
+            {t('quiz.restart')}
           </button>
-          <Link to="/dashboard" className="btn btn-outline">
+          <Link to="/dashboard" className="btn btn-outline" style={{ gap: '0.5rem' }}>
             <Home size={18} />
-            لوحة التحكم
+            {t('nav.dashboard')}
           </Link>
         </div>
       </div>
@@ -148,60 +169,74 @@ const Quiz = () => {
 
   return (
     <div className="quiz-container">
-      <div className="quiz-progress-header">
-        <span>السؤال {currentIndex + 1} من {TOTAL}</span>
-        <span className="quiz-score-badge">النقاط: {score}</span>
+      <div className="quiz-progress-header" style={{ flexDirection: dir === 'rtl' ? 'row' : 'row' }}>
+        <span>{t('quiz.question_label')} {currentIndex + 1} {t('quiz.out_of')} {TOTAL}</span>
+        <span className="quiz-score-badge">{t('quiz.points')}: {score}</span>
       </div>
 
-      <div className="quiz-progress-bar">
+      <div className="quiz-progress-bar" style={{ direction: 'ltr' }}>
         <div className="quiz-progress-fill" style={{ width: `${progress}%` }} />
       </div>
 
-      <div className="quiz-card">
-        <div className="quiz-question-number">س {currentIndex + 1}</div>
-        <h2 className="quiz-question-text">{current.question}</h2>
+      <div className="quiz-card" style={{ textAlign: language === 'ar' ? 'right' : 'left' }}>
+        <div className="quiz-question-number" style={{ [dir === 'rtl' ? 'right' : 'left']: '-1rem' } as any}>
+          {language === 'ar' ? 'س' : 'Q'} {currentIndex + 1}
+        </div>
+        <h2 className="quiz-question-text">{translated.question}</h2>
+
+        {language === 'en' && (
+          <p style={{ direction: 'rtl', textAlign: 'right', fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>
+            {current.question}
+          </p>
+        )}
 
         <div className="quiz-options">
-          {current.options.map((opt, i) => (
+          {translated.options.map((opt, i) => (
             <button
               key={i}
               className={getOptionClass(i)}
               onClick={() => handleSelect(i)}
               disabled={isAnswered}
+              style={{ textAlign: language === 'ar' ? 'right' : 'left' }}
             >
               <span className="quiz-option-letter">
-                {['أ', 'ب', 'ج', 'د'][i]}
+                {language === 'ar' ? ['أ', 'ب', 'ج', 'د'][i] : ['A', 'B', 'C', 'D'][i]}
               </span>
               <span className="quiz-option-text">{opt}</span>
               {isAnswered && i === current.correctAnswer && (
-                <CheckCircle size={20} className="quiz-option-icon" style={{ color: 'var(--color-success)', marginRight: 'auto' }} />
+                <CheckCircle size={20} className="quiz-option-icon" style={{ color: 'var(--color-success)', [dir === 'rtl' ? 'marginRight' : 'marginLeft']: 'auto' } as any} />
               )}
               {isAnswered && i === selectedAnswer && i !== current.correctAnswer && (
-                <XCircle size={20} className="quiz-option-icon" style={{ color: 'var(--color-error)', marginRight: 'auto' }} />
+                <XCircle size={20} className="quiz-option-icon" style={{ color: 'var(--color-error)', [dir === 'rtl' ? 'marginRight' : 'marginLeft']: 'auto' } as any} />
               )}
             </button>
           ))}
         </div>
 
         {isAnswered && (
-          <div className={`quiz-explanation ${selectedAnswer === current.correctAnswer ? 'quiz-explanation--correct' : 'quiz-explanation--wrong'}`}>
+          <div className={`quiz-explanation ${selectedAnswer === current.correctAnswer ? 'quiz-explanation--correct' : 'quiz-explanation--wrong'}`} style={{ textAlign: language === 'ar' ? 'right' : 'left' }}>
             <div className="quiz-explanation-header">
-              {selectedAnswer === current.correctAnswer ? 'إجابة صحيحة! 🎉' : `الإجابة الصحيحة هي: ${current.options[current.correctAnswer]}`}
+              {selectedAnswer === current.correctAnswer ? t('quiz.correct_answer') : `${t('quiz.correct_is')} ${translated.options[current.correctAnswer]}`}
             </div>
-            <p className="quiz-explanation-text">{current.explanation}</p>
+            <p className="quiz-explanation-text">{translated.explanation}</p>
+            {language === 'en' && (
+              <p style={{ direction: 'rtl', textAlign: 'right', fontSize: '0.85rem', marginTop: '1rem', opacity: 0.8 }}>
+                {current.explanation}
+              </p>
+            )}
           </div>
         )}
       </div>
 
-      <div className="quiz-nav">
-        <Link to="/dashboard" className="btn btn-outline">
-          <ChevronRight size={18} />
-          خروج
+      <div className="quiz-nav" style={{ flexDirection: dir === 'rtl' ? 'row' : 'row' }}>
+        <Link to="/dashboard" className="btn btn-outline" style={{ gap: '0.5rem' }}>
+          <ArrowIconExit size={18} />
+          {t('quiz.exit')}
         </Link>
         {isAnswered && (
-          <button className="btn btn-primary" onClick={handleNext}>
-            {currentIndex + 1 >= TOTAL ? 'عرض النتيجة' : 'السؤال التالي'}
-            <ChevronLeft size={18} style={{ marginRight: '8px' }} />
+          <button className="btn btn-primary" onClick={handleNext} style={{ gap: '0.5rem' }}>
+            {currentIndex + 1 >= TOTAL ? t('quiz.show_result') : t('questions.next')}
+            <ArrowIconNext size={18} />
           </button>
         )}
       </div>

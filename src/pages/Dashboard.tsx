@@ -1,36 +1,40 @@
 import { Link } from 'react-router-dom';
-import { Brain, BookOpen, Star, LogOut, User, ChevronLeft, ShieldCheck } from 'lucide-react';
+import { Brain, BookOpen, Star, LogOut, User, ChevronLeft, ChevronRight, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Dashboard = () => {
   const { user, signOut } = useAuth();
+  const { t, language, dir } = useLanguage();
 
   const displayName =
     user?.user_metadata?.full_name ||
     user?.user_metadata?.name ||
     user?.email?.split('@')[0] ||
-    'زائر';
+    t('dash.visitor');
+
+  const ArrowIcon = dir === 'rtl' ? ChevronLeft : ChevronRight;
 
   return (
     <div className="dashboard-page">
       {/* Header */}
-      <div className="dashboard-header">
-        <div className="dashboard-welcome">
+      <div className="dashboard-header" style={{ flexDirection: dir === 'rtl' ? 'row' : 'row' }}>
+        <div className="dashboard-welcome" style={{ flexDirection: dir === 'rtl' ? 'row' : 'row' }}>
           <div className="dashboard-avatar">
             {user?.user_metadata?.avatar_url ? (
-              <img src={user.user_metadata.avatar_url} alt="صورة المستخدم" />
+              <img src={user.user_metadata.avatar_url} alt={language === 'ar' ? "صورة المستخدم" : "User avatar"} />
             ) : (
               <User size={28} />
             )}
           </div>
-          <div>
-            <p className="dashboard-greeting">أهلاً وسهلاً،</p>
+          <div style={{ textAlign: language === 'ar' ? 'right' : 'left' }}>
+            <p className="dashboard-greeting">{t('dash.welcome')}</p>
             <h1 className="dashboard-username">{displayName}</h1>
           </div>
         </div>
-        <button className="btn btn-outline dashboard-logout" onClick={signOut}>
+        <button className="btn btn-outline dashboard-logout" onClick={signOut} style={{ gap: '0.5rem' }}>
           <LogOut size={18} />
-          تسجيل الخروج
+          {t('dash.logout')}
         </button>
       </div>
 
@@ -40,27 +44,27 @@ const Dashboard = () => {
           <div className="dashboard-stat-icon">
             <BookOpen size={22} />
           </div>
-          <div>
+          <div style={{ textAlign: language === 'ar' ? 'right' : 'left' }}>
             <p className="dashboard-stat-number">200</p>
-            <p className="dashboard-stat-label">سؤال وجواب</p>
+            <p className="dashboard-stat-label">{t('dash.stat_qa')}</p>
           </div>
         </div>
         <div className="dashboard-stat-card">
           <div className="dashboard-stat-icon">
             <Brain size={22} />
           </div>
-          <div>
+          <div style={{ textAlign: language === 'ar' ? 'right' : 'left' }}>
             <p className="dashboard-stat-number">50</p>
-            <p className="dashboard-stat-label">سؤال اختبار</p>
+            <p className="dashboard-stat-label">{t('dash.stat_quiz')}</p>
           </div>
         </div>
         <div className="dashboard-stat-card">
           <div className="dashboard-stat-icon">
             <Star size={22} />
           </div>
-          <div>
+          <div style={{ textAlign: language === 'ar' ? 'right' : 'left' }}>
             <p className="dashboard-stat-number">11</p>
-            <p className="dashboard-stat-label">قسمًا شاملًا</p>
+            <p className="dashboard-stat-label">{t('dash.stat_sections')}</p>
           </div>
         </div>
       </div>
@@ -72,14 +76,14 @@ const Dashboard = () => {
           <div className="dashboard-feature-icon">
             <ShieldCheck size={36} />
           </div>
-          <div className="dashboard-feature-body">
-            <h2 className="dashboard-feature-title">اختبر عقيدتك</h2>
+          <div className="dashboard-feature-body" style={{ textAlign: language === 'ar' ? 'right' : 'left' }}>
+            <h2 className="dashboard-feature-title">{t('dash.quiz_title')}</h2>
             <p className="dashboard-feature-desc">
-              اختبر معلوماتك وعلمك بالعقيدة الإسلامية بأسلوب السؤال والجواب المتعدد.
+              {t('dash.quiz_desc')}
             </p>
-            <span className="dashboard-feature-cta">
-              ابدأ الاختبار الآن
-              <ChevronLeft size={18} />
+            <span className="dashboard-feature-cta" style={{ justifyContent: language === 'ar' ? 'flex-start' : 'flex-end' }}>
+              {t('dash.quiz_cta')}
+              <ArrowIcon size={18} />
             </span>
           </div>
         </Link>
@@ -89,15 +93,14 @@ const Dashboard = () => {
           <div className="dashboard-feature-icon">
             <BookOpen size={36} />
           </div>
-          <div className="dashboard-feature-body">
-            <h2 className="dashboard-feature-title">استكشف الأسئلة</h2>
+          <div className="dashboard-feature-body" style={{ textAlign: language === 'ar' ? 'right' : 'left' }}>
+            <h2 className="dashboard-feature-title">{t('dash.browse_title')}</h2>
             <p className="dashboard-feature-desc">
-              تصفَّح مئتي سؤال وجواب في العقيدة الإسلامية مقسَّمة إلى أقسام متعددة
-              مع إمكانية البحث والتصفية.
+              {t('dash.browse_desc')}
             </p>
-            <span className="dashboard-feature-cta">
-              تصفح الأسئلة
-              <ChevronLeft size={18} />
+            <span className="dashboard-feature-cta" style={{ justifyContent: language === 'ar' ? 'flex-start' : 'flex-end' }}>
+              {t('dash.browse_cta')}
+              <ArrowIcon size={18} />
             </span>
           </div>
         </Link>
@@ -105,16 +108,16 @@ const Dashboard = () => {
 
       {/* Quick Links */}
       <div className="dashboard-quick-links">
-        <h3 className="dashboard-section-title">روابط سريعة</h3>
+        <h3 className="dashboard-section-title" style={{ textAlign: language === 'ar' ? 'right' : 'left' }}>{t('dash.quick_links')}</h3>
         <div className="dashboard-links-grid">
           <Link to="/" className="dashboard-quick-link">
-            الصفحة الرئيسية
+            {t('dash.home')}
           </Link>
           <Link to="/questions" className="dashboard-quick-link">
-            جميع الأسئلة
+            {t('nav.allQuestions')}
           </Link>
           <Link to="/quiz" className="dashboard-quick-link">
-            الاختبار التفاعلي
+            {t('dash.interactive')}
           </Link>
           <a
             href="https://drive.google.com/file/d/1EAf3Al8XSZjza1KNJ04-cFgnPtAdYd0F/view?usp=sharing"
@@ -122,7 +125,7 @@ const Dashboard = () => {
             rel="noopener noreferrer"
             className="dashboard-quick-link"
           >
-            تحميل الكتاب PDF
+            {t('dash.download')}
           </a>
         </div>
       </div>
