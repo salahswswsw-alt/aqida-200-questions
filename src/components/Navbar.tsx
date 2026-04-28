@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, LogIn, LayoutDashboard, ShieldCheck, LogOut, User, ClipboardList, Languages } from 'lucide-react';
+import { Menu, X, LayoutDashboard, ShieldCheck, LogOut, User, ClipboardList, Languages } from 'lucide-react';
 import Logo from './Logo';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -87,17 +87,7 @@ const Navbar = () => {
                 <LogOut size={18} />
               </button>
             </div>
-          ) : (
-            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-              <Link to="/login" className="nav-btn nav-btn--outline">
-                <LogIn size={16} />
-                {t('nav.login')}
-              </Link>
-              <Link to="/register" className="nav-btn nav-btn--primary">
-                {t('nav.register')}
-              </Link>
-            </div>
-          )}
+          ) : null}
         </div>
 
         {/* Mobile Toggle */}
@@ -145,18 +135,7 @@ const Navbar = () => {
               {t('nav.logout')}
             </button>
           </>
-        ) : (
-          <>
-            <Link to="/login" className="nav-btn" onClick={closeMenu}
-              style={{ textAlign: 'center', border: '1px solid var(--color-sky)', color: 'var(--color-sky)', display: 'block' }}>
-              {t('nav.login')}
-            </Link>
-            <Link to="/register" className="nav-btn" onClick={closeMenu}
-              style={{ background: 'var(--color-sky)', color: '#fff', border: 'none', textAlign: 'center', display: 'block', marginTop: '0.5rem' }}>
-              {t('nav.register')}
-            </Link>
-          </>
-        )}
+        ) : null}
       </div>
     </nav>
   );
