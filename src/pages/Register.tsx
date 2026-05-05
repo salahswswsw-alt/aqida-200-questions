@@ -8,7 +8,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 const Register = () => {
   const { signUpWithEmail, signInWithGoogle, user } = useAuth();
   const { addNotification } = useNotification();
-  const { t, language, dir } = useLanguage();
+  const { t, dir } = useLanguage();
   const navigate = useNavigate();
 
   const [fullName, setFullName] = useState('');
