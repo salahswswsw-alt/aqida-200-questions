@@ -147,7 +147,7 @@ const Login = () => {
                 type="button"
                 className="form-password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
-                aria-label="إظهار/إخفاء كلمة المرور"
+                aria-label={t('auth.toggle_password')}
                 style={{ [dir === 'rtl' ? 'left' : 'right']: '1.25rem' } as any}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}

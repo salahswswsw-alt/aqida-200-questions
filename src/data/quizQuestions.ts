@@ -5,6 +5,9 @@ export interface QuizQuestion {
   correctAnswer: number;
   category: string;
   explanation: string;
+  question_en?: string;
+  options_en?: string[];
+  explanation_en?: string;
 }
 
 export const quizQuestions: QuizQuestion[] = [

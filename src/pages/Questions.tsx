@@ -1,16 +1,29 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Filter } from 'lucide-react';
-import questions from '../data/questions.json';
+import questionsTranslated from '../data/questions_translated.json';
 import { useLanguage } from '../contexts/LanguageContext';
+
+interface TranslatedQuestion {
+  id: number;
+  question: string;
+  answer: string;
+  category: string;
+  question_en?: string;
+  answer_en?: string;
+  category_en?: string;
+}
+
+const questions = questionsTranslated as TranslatedQuestion[];
 
 const Questions = () => {
   const { t, language, dir } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(t('questions.all'));
 
-  const translateCategory = (cat: string) => {
+  const translateCategory = (cat: string, catEn?: string) => {
     if (language === 'ar') return cat;
+    if (catEn) return catEn;
     const mapping: Record<string, string> = {
       'توحيد وعبادة': 'Tawhid & Worship',
       'مراتب الدين والإسلام': 'Ranks of Religion & Islam',
@@ -37,16 +50,24 @@ const Questions = () => {
 
   const filteredQuestions = useMemo(() => {
     return questions.filter((q) => {
-      const matchesSearch = q.question.includes(searchTerm) || q.answer.includes(searchTerm);
+      const tq = q as TranslatedQuestion;
+      let matchesSearch: boolean;
+      if (language === 'ar') {
+        matchesSearch = tq.question.includes(searchTerm) || tq.answer.includes(searchTerm);
+      } else {
+        const enQ = tq.question_en || tq.question;
+        const enA = tq.answer_en || tq.answer;
+        matchesSearch = enQ.toLowerCase().includes(searchTerm.toLowerCase()) || enA.toLowerCase().includes(searchTerm.toLowerCase());
+      }
       const matchesCategory = selectedCategory === t('questions.all') || q.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [searchTerm, selectedCategory, t]);
+  }, [searchTerm, selectedCategory, t, language]);
 
   return (
     <div>
       <h1 className="section-title">
-        {language === 'ar' ? <>جميع <span className="highlight">الأسئلة</span></> : <>All <span className="highlight">Questions</span></>}
+        {t('questions.title').split(' ').slice(0, -1).join(' ')} <span className="highlight">{t('questions.title').split(' ').pop()}</span>
       </h1>
       
       <div className="controls-container">
@@ -102,16 +123,26 @@ const Questions = () => {
         </div>
       ) : (
         <div className="questions-grid">
-          {filteredQuestions.map((q) => (
-            <Link to={`/question/${q.id}`} key={q.id} className="question-card">
-              <div className="question-header" style={{ justifyContent: 'space-between' }}>
-                <span className="question-category">{translateCategory(q.category)}</span>
-                <div className="question-badge">{q.id}</div>
-              </div>
-              <h3 className="question-title">{language === 'ar' ? q.question : `Question ${q.id}: (Detailed Translation Available)`}</h3>
-              <p className="question-excerpt">{language === 'ar' ? q.answer : "Please select the question to view more details."}</p>
-            </Link>
-          ))}
+          {filteredQuestions.map((q) => {
+            const tq = q as TranslatedQuestion;
+            const displayQ = language === 'ar'
+              ? tq.question
+              : (tq.question_en || `Q${tq.id} — ${translateCategory(tq.category, tq.category_en)}`);
+            const displayExcerpt = language === 'ar'
+              ? tq.answer.slice(0, 120) + '...'
+              : (tq.answer_en ? tq.answer_en.slice(0, 120) + '...' : 'Click to read the full answer.');
+
+            return (
+              <Link to={`/question/${tq.id}`} key={tq.id} className="question-card">
+                <div className="question-header" style={{ justifyContent: 'space-between' }}>
+                  <span className="question-category">{translateCategory(tq.category, tq.category_en)}</span>
+                  <div className="question-badge">{tq.id}</div>
+                </div>
+                <h3 className="question-title">{displayQ}</h3>
+                <p className="question-excerpt">{displayExcerpt}</p>
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>

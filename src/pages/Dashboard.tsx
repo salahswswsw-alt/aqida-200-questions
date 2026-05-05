@@ -22,7 +22,7 @@ const Dashboard = () => {
         <div className="dashboard-welcome" style={{ flexDirection: dir === 'rtl' ? 'row' : 'row' }}>
           <div className="dashboard-avatar">
             {user?.user_metadata?.avatar_url ? (
-              <img src={user.user_metadata.avatar_url} alt={language === 'ar' ? "صورة المستخدم" : "User avatar"} />
+              <img src={user.user_metadata.avatar_url} alt="User avatar" />
             ) : (
               <User size={28} />
             )}

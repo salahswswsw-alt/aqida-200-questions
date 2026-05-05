@@ -6,6 +6,7 @@ import {
   BookOpen, AlertCircle, Send,
 } from 'lucide-react';
 import { quizQuestions } from '../data/quizQuestions';
+import { quizQuestionsEn } from '../data/quizQuestionsEn';
 import { useLanguage } from '../contexts/LanguageContext';
 
 type Phase = 'start' | 'exam' | 'result';
@@ -25,7 +26,7 @@ const Exam = () => {
     if (pct >= 90) return { label: t('quiz.score_excellent') + ' 🌟', color: '#16a34a' };
     if (pct >= 75) return { label: t('quiz.score_very_good') + ' 👍', color: '#0284c7' };
     if (pct >= 60) return { label: t('quiz.score_good'), color: '#d97706' };
-    if (pct >= 50) return { label: 'مقبول', color: '#f97316' }; // Defaulting to Arabic for 'Pass' if no key
+    if (pct >= 50) return { label: t('quiz.score_pass'), color: '#f97316' };
     return { label: t('quiz.score_needs_review'), color: '#dc2626' };
   };
 
@@ -83,16 +84,30 @@ const Exam = () => {
   const ArrowNext = dir === 'rtl' ? ChevronLeft : ChevronRight;
   const ArrowPrev = dir === 'rtl' ? ChevronRight : ChevronLeft;
 
+  const categoryMapEn: Record<string, string> = {
+    'أركان الإيمان': 'Pillars of Faith',
+    'التوحيد': 'Monotheism (Tawhid)',
+    'الإيمان بالملائكة': 'Belief in Angels',
+    'الإيمان بالكتب': 'Belief in Books',
+    'الإيمان بالرسل': 'Belief in Messengers',
+    'اليوم الآخر': 'The Last Day',
+    'القدر': 'Divine Decree',
+    'العقيدة العامة': 'General Creed',
+    'الأسماء والصفات': 'Names & Attributes',
+  };
+
   const getTranslatedQuestion = (q: typeof current) => {
     if (language === 'ar') return {
       question: q.question,
       options: q.options,
       category: q.category
     };
+    const en = quizQuestionsEn[q.id];
+    // Use English translations if available, otherwise show Arabic with note
     return {
-      question: `Question ${q.id}: (In Arabic: ${q.question})`,
-      options: q.options.map((opt, idx) => `${LETTERS[idx]}) ${opt}`),
-      category: "Category Placeholder"
+      question: en?.question || q.question,
+      options: en?.options || q.options,
+      category: categoryMapEn[q.category] || q.category
     };
   };
 
@@ -136,7 +151,7 @@ const Exam = () => {
         </button>
 
         <div style={{ marginTop: '1.5rem' }}>
-          <Link to="/questions" className="auth-link">{t('questions.browse') || (language === 'ar' ? 'تصفح الأسئلة والأجوبة' : 'Browse Questions')}</Link>
+          <Link to="/questions" className="auth-link">{t('questions.browse')}</Link>
         </div>
       </div>
     );

@@ -102,7 +102,7 @@ const Register = () => {
             <UserPlus size={28} />
           </div>
           <h1 className="auth-title">{t('auth.register.title')}</h1>
-          <p className="auth-subtitle">{t('auth.register.subtitle') || (language === 'ar' ? 'انضم إلى منصة العقيدة واستفد من محتواها' : 'Join the Aqida platform and benefit from its content')}</p>
+          <p className="auth-subtitle">{t('auth.register.subtitle')}</p>
         </div>
 
         <button
@@ -128,7 +128,7 @@ const Register = () => {
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <div className="form-field">
             <label className="form-label" htmlFor="fullName" style={{ textAlign: dir === 'rtl' ? 'right' : 'left', display: 'block' }}>
-              {t('auth.register.name') || (language === 'ar' ? 'الاسم الكامل' : 'Full Name')}
+              {t('auth.register.name')}
             </label>
             <div className="form-input-wrapper">
               <span className="form-input-icon" style={{ [dir === 'rtl' ? 'right' : 'left']: '1.25rem' } as any}>
@@ -138,7 +138,7 @@ const Register = () => {
                 id="fullName"
                 type="text"
                 className={`auth-input ${errors.fullName ? 'auth-input--error' : ''}`}
-                placeholder={language === 'ar' ? 'اسمك الكامل' : 'Your full name'}
+                placeholder={t('auth.register.name_placeholder')}
                 value={fullName}
                 onChange={e => { setFullName(e.target.value); setErrors(p => ({ ...p, fullName: undefined })); }}
                 style={{ [dir === 'rtl' ? 'paddingRight' : 'paddingLeft']: '3.5rem' } as any}
@@ -193,6 +193,7 @@ const Register = () => {
                 type="button"
                 className="form-password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={t('auth.toggle_password')}
                 style={{ [dir === 'rtl' ? 'left' : 'right']: '1.25rem' } as any}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -219,7 +220,7 @@ const Register = () => {
 
           <div className="form-field">
             <label className="form-label" htmlFor="confirmPassword" style={{ textAlign: dir === 'rtl' ? 'right' : 'left', display: 'block' }}>
-              {language === 'ar' ? 'تأكيد كلمة المرور' : 'Confirm Password'}
+              {t('auth.register.confirm_password')}
             </label>
             <div className="form-input-wrapper">
               <span className="form-input-icon" style={{ [dir === 'rtl' ? 'right' : 'left']: '1.25rem' } as any}>

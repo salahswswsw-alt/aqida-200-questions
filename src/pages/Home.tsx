@@ -1,15 +1,28 @@
 import { Link } from 'react-router-dom';
 import { Target, Layers, Layout, Compass, Users, CheckCircle, Video, Book, ClipboardList } from 'lucide-react';
-import questions from '../data/questions.json';
+import questionsTranslated from '../data/questions_translated.json';
 import { useLanguage } from '../contexts/LanguageContext';
+
+interface TranslatedQuestion {
+  id: number;
+  question: string;
+  answer: string;
+  category: string;
+  question_en?: string;
+  answer_en?: string;
+  category_en?: string;
+}
+
+const allQuestions = questionsTranslated as TranslatedQuestion[];
 
 const Home = () => {
   const { t, language } = useLanguage();
-  const previewQuestions = questions.slice(0, 6);
+  const previewQuestions = allQuestions.slice(0, 6);
 
   // Simple category translation helper
-  const translateCategory = (cat: string) => {
+  const translateCategory = (cat: string, catEn?: string) => {
     if (language === 'ar') return cat;
+    if (catEn) return catEn;
     const mapping: Record<string, string> = {
       'توحيد وعبادة': 'Tawhid & Worship',
       'مراتب الدين والإسلام': 'Ranks of Religion & Islam',
@@ -153,16 +166,24 @@ const Home = () => {
         </div>
 
         <div className="questions-grid">
-          {previewQuestions.map((q) => (
-            <Link to={`/question/${q.id}`} key={q.id} className="question-card">
-              <div className="question-header" style={{ justifyContent: 'space-between' }}>
-                <span className="question-category">{translateCategory(q.category)}</span>
-                <div className="question-badge">{q.id}</div>
-              </div>
-              <h3 className="question-title">{language === 'ar' ? q.question : `Question ${q.id}: (Translated Content Available in Detail)`}</h3>
-              <p className="question-excerpt">{language === 'ar' ? q.answer : "Tap to read the detailed answer in Arabic or explore available English summaries."}</p>
-            </Link>
-          ))}
+          {previewQuestions.map((q) => {
+            const displayQ = language === 'ar'
+              ? q.question
+              : (q.question_en || `Q${q.id}: ${translateCategory(q.category, q.category_en)}`);
+            const displayExcerpt = language === 'ar'
+              ? q.answer.slice(0, 120) + '...'
+              : (q.answer_en ? q.answer_en.slice(0, 120) + '...' : 'Click to read the full answer for this question.');
+            return (
+              <Link to={`/question/${q.id}`} key={q.id} className="question-card">
+                <div className="question-header" style={{ justifyContent: 'space-between' }}>
+                  <span className="question-category">{translateCategory(q.category, q.category_en)}</span>
+                  <div className="question-badge">{q.id}</div>
+                </div>
+                <h3 className="question-title">{displayQ}</h3>
+                <p className="question-excerpt" style={{ direction: language === 'ar' ? 'rtl' : 'ltr' }}>{displayExcerpt}</p>
+              </Link>
+            );
+          })}
         </div>
         
         <div className="text-center mt-4">
@@ -177,7 +198,7 @@ const Home = () => {
         <div className="book-image">
           <div className="book-mockup" style={{ background: 'linear-gradient(135deg, var(--color-sky) 0%, #0369a1 100%)' }}>
             <div className="book-number">200</div>
-            <div className="book-text">{language === 'ar' ? <>سؤال وجواب<br/>في العقيدة</> : <>Questions & Answers<br/>in Creed</>}</div>
+            <div className="book-text">{t('home.stats.questions')}<br/>{language === 'ar' ? 'في العقيدة' : 'in Islamic Creed'}</div>
           </div>
         </div>
         <div className="book-content">

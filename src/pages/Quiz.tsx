@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle, XCircle, RotateCcw, Trophy, ChevronLeft, ChevronRight, Home, ShieldCheck } from 'lucide-react';
 import { quizQuestions } from '../data/quizQuestions';
+import { quizQuestionsEn } from '../data/quizQuestionsEn';
 import { useNotification } from '../contexts/NotificationContext';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -80,19 +81,33 @@ const Quiz = () => {
   const ArrowIconNext = dir === 'rtl' ? ChevronLeft : ChevronRight;
   const ArrowIconExit = dir === 'rtl' ? ChevronRight : ChevronLeft;
 
-  const getTranslatedQuestion = () => {
-    if (language === 'ar') return {
-      question: current.question,
-      options: current.options,
-      explanation: current.explanation
-    };
+  const categoryMapEn: Record<string, string> = {
+    'أركان الإيمان': 'Pillars of Faith',
+    'التوحيد': 'Monotheism (Tawhid)',
+    'الإيمان بالملائكة': 'Belief in Angels',
+    'الإيمان بالكتب': 'Belief in Books',
+    'الإيمان بالرسل': 'Belief in Messengers',
+    'اليوم الآخر': 'The Last Day',
+    'القدر': 'Divine Decree',
+    'العقيدة العامة': 'General Creed',
+    'الأسماء والصفات': 'Names & Attributes',
+  };
 
-    // Placeholder for translated quiz content
-    // In a real app, this would come from a translated JSON or API
+  const getTranslatedQuestion = () => {
+    if (language === 'ar') {
+      return {
+        question: current.question,
+        options: current.options,
+        explanation: current.explanation,
+        category: current.category,
+      };
+    }
+    const en = quizQuestionsEn[current.id];
     return {
-      question: `Question ${current.id}: (Translated Content Available in Arabic)`,
-      options: current.options.map((_, i) => `Option ${['A', 'B', 'C', 'D'][i]}`),
-      explanation: "Detailed explanation is available in the Arabic version."
+      question: en?.question || current.question,
+      options: en?.options || current.options,
+      explanation: en?.explanation || current.explanation,
+      category: categoryMapEn[current.category] || current.category,
     };
   };
 
@@ -123,7 +138,7 @@ const Quiz = () => {
           {t('dash.quiz_cta')}
         </button>
         <div style={{ marginTop: '2rem' }}>
-          <Link to="/dashboard" className="auth-link">{t('questions.back_to_dashboard') || (language === 'ar' ? 'العودة للوحة التحكم' : 'Back to Dashboard')}</Link>
+          <Link to="/dashboard" className="auth-link">{t('dash.home')}</Link>
         </div>
       </div>
     );
@@ -180,15 +195,11 @@ const Quiz = () => {
 
       <div className="quiz-card" style={{ textAlign: language === 'ar' ? 'right' : 'left' }}>
         <div className="quiz-question-number" style={{ [dir === 'rtl' ? 'right' : 'left']: '-1rem' } as any}>
-          {language === 'ar' ? 'س' : 'Q'} {currentIndex + 1}
+          {t('quiz.question_label')[0]} {currentIndex + 1}
         </div>
         <h2 className="quiz-question-text">{translated.question}</h2>
 
-        {language === 'en' && (
-          <p style={{ direction: 'rtl', textAlign: 'right', fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>
-            {current.question}
-          </p>
-        )}
+
 
         <div className="quiz-options">
           {translated.options.map((opt, i) => (
@@ -219,11 +230,7 @@ const Quiz = () => {
               {selectedAnswer === current.correctAnswer ? t('quiz.correct_answer') : `${t('quiz.correct_is')} ${translated.options[current.correctAnswer]}`}
             </div>
             <p className="quiz-explanation-text">{translated.explanation}</p>
-            {language === 'en' && (
-              <p style={{ direction: 'rtl', textAlign: 'right', fontSize: '0.85rem', marginTop: '1rem', opacity: 0.8 }}>
-                {current.explanation}
-              </p>
-            )}
+
           </div>
         )}
       </div>
@@ -235,7 +242,7 @@ const Quiz = () => {
         </Link>
         {isAnswered && (
           <button className="btn btn-primary" onClick={handleNext} style={{ gap: '0.5rem' }}>
-            {currentIndex + 1 >= TOTAL ? t('quiz.show_result') : t('questions.next')}
+            {currentIndex + 1 >= TOTAL ? t('quiz.finished') : t('questions.next')}
             <ArrowIconNext size={18} />
           </button>
         )}
